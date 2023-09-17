@@ -1,0 +1,133 @@
+import java.io.*;
+import java.io.IOException;
+import java.util.Scanner;
+class Form
+{
+    private String name;
+    private int id;
+    private String address;
+    private String passwd;
+    private String userName;
+    private int age;
+    public void setRegistration()
+    {   Scanner input = new Scanner(System.in);
+        System.out.print("Enter  name :");
+        name =input.next();
+        System.out.print("Enter Id :");
+        id = input.nextInt();
+        System.out.print("Enter address:");
+        address=input.next();
+        System.out.print("Enter Username :");
+        userName=input.next();
+        System.out.print("Enter password :");
+        passwd =input.next();
+        System.out.print("Enter age :");
+        age= input.nextInt();
+    }
+
+    public String getUserName() {return userName;}
+
+    public String getPassword() {return passwd;}
+
+    public void Display()
+    {
+        System.out.println("Name :"+name);
+        System.out.println("username:"+userName);
+        System.out.println("id :"+id);
+        System.out.println("password :"+passwd);
+        System.out.println("Address:"+address);
+        System.out.println("Age :"+age);
+    }
+
+}
+
+public class paswordcheck {
+    public static void main(String[] args)  throws IOException {
+
+        Scanner inout = new Scanner(System.in);
+        Form userForm = new Form();
+        int chose;
+
+        do {
+            System.out.println("----------------------------");
+            System.out.println("Login and Registration System");
+            System.out.println(" Enter 1: For Registration ");
+            System.out.println(" Enter 2: For Login");
+            System.out.println(" Enter 3: For Display your new Registration information");
+            System.out.println(" Enter 4: Edit information ");
+            System.out.println(" Enter 5: Exit Program");
+            System.out.print("chose one of the above option --:");
+            chose = inout.nextInt();
+            switch (chose) {
+                case 1:
+
+                    userForm.setRegistration(); // Gather user information
+                    String userName = userForm.getUserName();
+                    String password = userForm.getPassword();
+
+                    // Save username and password to a text file
+
+                    FileWriter fileWriter = new FileWriter("C:\\Users\\Mehran ALi\\Desktop\\khan.txt", true); // Append mode
+                    fileWriter.write(userForm.getUserName() + " " + userForm.getPassword() + "\n");
+                    fileWriter.close();
+                    System.out.println("Registration Successfully");
+
+
+
+                    break;
+                case 2:
+                    FileReader fileReader = new FileReader("C:\\Users\\Mehran ALi\\Desktop\\khan.txt");
+                    Scanner read = new Scanner(System.in);
+                    System.out.print("Enter user name");
+                    userName = read.next();
+                    System.out.print("Enter password");
+                    password = read.next();
+
+                    Scanner fileScanner = new Scanner(fileReader);
+                    boolean user = false;
+                    boolean pwd = false;
+
+                    while (fileScanner.hasNextLine()) {
+                        String line = fileScanner.nextLine();
+                        String[] parts = line.split("\\s+"); // Split by whitespace
+                        if (parts.length == 2 && parts[0].equals(userName) && parts[1].equals(password)) {
+                            user = true;
+                            pwd = true;
+                        } else if (parts.length == 2 && parts[0].equals(userName)) {
+                            user = true;
+                        } else if (parts[1].equals(password)) {
+                            pwd = true;
+                        }
+
+
+                    }
+
+                    if (user && pwd) {
+                        System.out.println("You are successfully registered.");
+                    } else if (user) {
+                        System.out.println("Password is incorrect. Registration failed.");
+                    } else if (pwd) {
+                        System.out.println("Username is incorrect. Registration failed.");
+                    } else {
+                        System.out.println("Username and password are incorrect. Registration failed.");
+                    }
+
+                    fileScanner.close();
+                    fileReader.close();
+                    break;
+                case 3:
+                    userForm.Display();
+                    break;
+                case 4:
+                    userForm.setRegistration();
+                    break;
+                default:
+                    System.out.print("Enter correct choice and Try again");
+            }
+
+
+        } while (chose != 5);
+      System.out.print("---------------------");
+    }
+
+}
